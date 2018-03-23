@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Kniha Jazd 0.2</string>
+    <string name="from">FROM: </string>
+    <string name="starting_point">Starting point</string>
+    <string name="ending_point">Ending point</string>
+    <string name="to">TO: </string>
+    <string name="search">Search</string>
+    <string name="distance">DISTANCE:</string>
+    <string name="Date_hint">DD/MM/YY</string>
+    <string name="date">DATE:</string>
+</resources>
