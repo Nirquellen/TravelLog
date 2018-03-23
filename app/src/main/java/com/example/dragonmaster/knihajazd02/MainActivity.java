@@ -9,13 +9,16 @@ import android.os.Build;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 
 import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -36,14 +39,19 @@ public class MainActivity extends AppCompatActivity {
     private ArrayList<String> permissions = new ArrayList<>();
     private final static int ALL_PERMISSIONS_RESULT = 101;
     ApiInterface apiService;
-    Calendar mCalendar;
-    Context mContext = this;
+    private Calendar mCalendar;
+    private Context mContext = this;
+    private LogJournal mLogJournal;
+    private String mDistance;
 
     @BindView(R.id.startPoint) EditText start;
     @BindView(R.id.endPoint) EditText end;
     @BindView(R.id.result) EditText result;
     @BindView(R.id.button) Button button;
     @BindView(R.id.date) EditText date;
+    @BindView(R.id.save) Button save;
+    @BindView(R.id.logs_wrapper) LinearLayout mLogsWrapper;
+    @BindView(android.R.id.list) RecyclerView mList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,10 +73,33 @@ public class MainActivity extends AppCompatActivity {
                         mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
+        save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mLogsWrapper.getVisibility() == View.GONE) {
+                    mLogsWrapper.setVisibility(View.VISIBLE);
+                    mLogJournal = new LogJournal(new ArrayList<Log>());
+                    mList.setAdapter(mLogJournal);
+                    mList.setLayoutManager(new LinearLayoutManager(getBaseContext()));
+                }
+                Log mLog = new Log();
+                mLog.date = date.getText().toString();
+                mLog.start = start.getText().toString().replaceAll("\\d","").trim();
+                mLog.end = end.getText().toString().replaceAll("\\d","").trim();
+                mLog.distance = mDistance;
+                mLogJournal.addLog(mLog);
+            }
+        });
     }
 
     @OnClick(R.id.button)
-    public void onClick(View view) {fetchDistance(); }
+    public void onClick(View view) {
+        if (this.getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+        fetchDistance();
+    }
 
     private ArrayList<String> findUnAskedPermissions(ArrayList<String> wanted) {
         ArrayList<String> result = new ArrayList<>();
@@ -172,7 +203,8 @@ public class MainActivity extends AppCompatActivity {
                         ResultDistanceMatrix.InfoDistanceMatrix.ValueItem itemDistance = distanceElement.distance;
                         String totalDistance = String.valueOf(itemDistance.text);
                         //String totalDuration = String.valueOf(itemDuration.text);
-                        result.setText(totalDistance);
+                        mDistance = totalDistance;
+                        result.setText(mDistance);
                     } else {
                         result.setText(distanceElement.status);
                     }

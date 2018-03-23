@@ -1,59 +1,93 @@
 <?xml version="1.0" encoding="utf-8"?>
-<GridLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.dragonmaster.knihajazd02.MainActivity"
-    android:layout_marginHorizontal="16dp"
-    android:rowCount="8"
-    android:columnCount="3"
-    >
+    android:orientation="vertical"
+    android:padding="16dp">
 
-    <TextView
-        android:text="@string/date" />
-    <EditText
-        android:id="@+id/date"
-        android:inputType="date"
-        android:focusable="false"
-        android:hint="@string/Date_hint"/>
-    <TextView
-        android:text="@string/from"
-        android:layout_row="1"
-        android:layout_column="0"/>
-
-    <EditText
-        android:id="@+id/startPoint"
+        <GridLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/starting_point"
-        android:textColorHint="@android:color/darker_gray" />
-    <TextView
-        android:text="@string/to"
-        android:layout_row="2"
-        android:layout_column="0"/>
-    <EditText
-        android:id="@+id/endPoint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="@string/ending_point"
-        android:textColorHint="@android:color/darker_gray" />
-    <Button
-        android:id="@+id/button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_row="3"
-        android:layout_column="1"
-        android:text="@string/search" />
-    <TextView
-        android:text="@string/distance"
-        android:layout_row="4"
-        android:layout_column="0"/>
-    <EditText
-        android:id="@+id/result"
-        android:layout_column="1"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="" />
+        tools:context="com.example.dragonmaster.knihajazd02.MainActivity"
+        android:layout_marginHorizontal="16dp"
+        android:rowCount="8"
+        android:columnCount="3"
+        >
 
-</GridLayout>
+        <TextView
+            android:text="@string/date" />
+        <EditText
+            android:id="@+id/date"
+            android:inputType="date"
+            android:focusable="false"
+            android:hint="@string/Date_hint"/>
+        <TextView
+            android:text="@string/from"
+            android:layout_row="1"
+            android:layout_column="0"/>
+
+        <EditText
+            android:id="@+id/startPoint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/starting_point"
+            android:textColorHint="@android:color/darker_gray" />
+        <TextView
+            android:text="@string/to"
+            android:layout_row="2"
+            android:layout_column="0"/>
+        <EditText
+            android:id="@+id/endPoint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/ending_point"
+            android:textColorHint="@android:color/darker_gray" />
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_row="3"
+            android:layout_column="1"
+            android:text="@string/search" />
+        <TextView
+            android:text="@string/distance"
+            android:layout_row="4"
+            android:layout_column="0"/>
+        <EditText
+            android:id="@+id/result"
+            android:layout_column="1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="" />
+        <Button
+            android:id="@+id/save"
+            android:layout_column="1"
+            android:text="@string/save"/>
+    </GridLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="16dp"
+        android:background="@color/white"/>
+
+    <LinearLayout
+        android:id="@+id/logs_wrapper"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:visibility="gone">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@android:id/list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+
+    </LinearLayout>
+
+</LinearLayout>
