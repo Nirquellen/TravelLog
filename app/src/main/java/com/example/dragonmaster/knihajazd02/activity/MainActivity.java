@@ -1,4 +1,4 @@
-package com.example.dragonmaster.knihajazd02;
+package com.example.dragonmaster.knihajazd02.activity;
 
 import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.AttributeSet;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -18,12 +19,25 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.example.dragonmaster.knihajazd02.R;
+import com.example.dragonmaster.knihajazd02.api.ResultDistanceMatrix;
+import com.example.dragonmaster.knihajazd02.adapter.LogJournal;
+import com.example.dragonmaster.knihajazd02.api.APIClient;
+import com.example.dragonmaster.knihajazd02.api.ApiInterface;
+import com.example.dragonmaster.knihajazd02.model.Log;
+
 import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
+import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -43,11 +57,12 @@ public class MainActivity extends AppCompatActivity {
     private Context mContext = this;
     private LogJournal mLogJournal;
     private String mDistance;
+    private Realm mRealm;
+    private SimpleDateFormat format = new SimpleDateFormat("d. MMM. yyyy");
 
     @BindView(R.id.startPoint) EditText start;
     @BindView(R.id.endPoint) EditText end;
     @BindView(R.id.result) EditText result;
-    @BindView(R.id.button) Button button;
     @BindView(R.id.date) EditText date;
     @BindView(R.id.save) Button save;
     @BindView(R.id.logs_wrapper) LinearLayout mLogsWrapper;
@@ -59,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         mCalendar = Calendar.getInstance();
+        mRealm = Realm.getDefaultInstance();
 
         permissionsToRequest = findUnAskedPermissions(permissions);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -66,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
                 requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
         }
         apiService = APIClient.getClient().create(ApiInterface.class);
+
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -78,18 +95,26 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 if (mLogsWrapper.getVisibility() == View.GONE) {
                     mLogsWrapper.setVisibility(View.VISIBLE);
-                    mLogJournal = new LogJournal(new ArrayList<Log>());
-                    mList.setAdapter(mLogJournal);
-                    mList.setLayoutManager(new LinearLayoutManager(getBaseContext()));
                 }
                 Log mLog = new Log();
-                mLog.date = date.getText().toString();
+                try {
+                    mLog.date = format.parse(date.getText().toString());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
                 mLog.start = start.getText().toString().replaceAll("\\d","").trim();
                 mLog.end = end.getText().toString().replaceAll("\\d","").trim();
                 mLog.distance = mDistance;
-                mLogJournal.addLog(mLog);
+                mLog.id = mLogJournal.getItemCount();
+                saveResult(mLog);
             }
         });
+
+        RealmResults<Log> logs = mRealm.where(Log.class).sort("date", Sort.DESCENDING).findAll();
+        mLogJournal = new LogJournal(mContext, logs);
+        mList.setAdapter(mLogJournal);
+        mList.setLayoutManager(new LinearLayoutManager(mContext));
+        mList.setHasFixedSize(true);
     }
 
     @OnClick(R.id.button)
@@ -119,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
             mCalendar.set(Calendar.YEAR, year);
             mCalendar.set(Calendar.MONTH, monthOfYear);
             mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-            date.setText(DateFormat.getDateInstance().format(mCalendar.getTime()));
+            date.setText(format.format(mCalendar.getTime()));
         }
     };
 
@@ -216,6 +241,23 @@ public class MainActivity extends AppCompatActivity {
                 call.cancel();
             }
         });
+    }
+
+    private void saveResult(final Log log) {
+        Realm realm = null;
+        try {
+            realm = Realm.getDefaultInstance();
+            realm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(Realm realm) {
+                    realm.insertOrUpdate(log);
+                }
+            });
+        } finally {
+            if(realm != null) {
+                realm.close();
+            }
+        }
     }
 
     /*@Override

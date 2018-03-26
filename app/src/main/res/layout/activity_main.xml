@@ -11,7 +11,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context="com.example.dragonmaster.knihajazd02.MainActivity"
+        tools:context="com.example.dragonmaster.knihajazd02.activity.MainActivity"
         android:layout_marginHorizontal="16dp"
         android:rowCount="8"
         android:columnCount="3"

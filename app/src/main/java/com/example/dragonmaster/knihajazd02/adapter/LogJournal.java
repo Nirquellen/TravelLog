@@ -1,4 +1,4 @@
-package com.example.dragonmaster.knihajazd02;
+package com.example.dragonmaster.knihajazd02.adapter;
 
 import android.content.Context;
 import android.support.annotation.NonNull;
@@ -8,30 +8,29 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.dragonmaster.knihajazd02.R;
+import com.example.dragonmaster.knihajazd02.model.Log;
+
+import java.text.SimpleDateFormat;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import io.realm.OrderedRealmCollection;
+import io.realm.RealmRecyclerViewAdapter;
 
 /**
  * Created by Dragon Master on 23.3.2018.
  */
 
-public class LogJournal extends RecyclerView.Adapter<LogJournal.ViewHolder>  {
+public class LogJournal extends RealmRecyclerViewAdapter<Log, LogJournal.ViewHolder>  {
 
     private Context mContext;
-    private List<Log> mLogs;
 
-    public LogJournal(@NonNull List<Log> logs) {
-        mLogs = logs;
-    }
-
-    public void addLog(@NonNull Log log) {
-        mLogs.add(log);
-        Collections.sort(mLogs);
-        notifyDataSetChanged();
+    public LogJournal(Context context, @NonNull OrderedRealmCollection<Log> logs) {
+        super(logs, true);
+        mContext = context;
     }
 
     @Override
@@ -43,16 +42,12 @@ public class LogJournal extends RecyclerView.Adapter<LogJournal.ViewHolder>  {
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Log log = mLogs.get(position);
-        holder.mDate.setText(log.date);
+        Log log = getItem(position);
+        SimpleDateFormat format = new SimpleDateFormat("d. MMM. yyyy");
+        holder.mDate.setText(format.format(log.date));
         holder.mStart.setText(log.start);
         holder.mEnd.setText(log.end);
         holder.mDist.setText(log.distance);
-    }
-
-    @Override
-    public int getItemCount() {
-        return mLogs.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

@@ -1,4 +1,4 @@
-package com.example.dragonmaster.knihajazd02;
+package com.example.dragonmaster.knihajazd02.api;
 
 /**
  * Created by Dragon Master on 16.3.2018.
@@ -24,16 +24,14 @@ public class APIClient {
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().readTimeout(30, TimeUnit.SECONDS).writeTimeout(30, TimeUnit.SECONDS).addInterceptor(interceptor).build();
 
-
-        retrofit = null;
+        if(retrofit != null)
+            return retrofit;
 
         retrofit = new Retrofit.Builder()
                 .baseUrl(base_url)
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(client)
                 .build();
-
-
         return retrofit;
     }
 

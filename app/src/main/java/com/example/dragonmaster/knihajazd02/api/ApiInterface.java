@@ -1,4 +1,4 @@
-package com.example.dragonmaster.knihajazd02;
+package com.example.dragonmaster.knihajazd02.api;
 
 import java.util.Map;
 

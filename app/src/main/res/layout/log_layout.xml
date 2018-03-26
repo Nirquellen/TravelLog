@@ -9,7 +9,7 @@
     <TextView
         android:id="@+id/logDate"
         android:layout_margin="8dp"
-        android:layout_width="50dp"
+        android:layout_width="55dp"
         android:layout_height="match_parent"
         android:hint="@string/Date_hint"/>
     <TextView
