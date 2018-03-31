@@ -6,7 +6,7 @@
     <string name="to">TO: </string>
     <string name="search">Search</string>
     <string name="distance">DISTANCE:</string>
-    <string name="Date_hint">DD/MM/YY</string>
+    <string name="Date_hint">Date</string>
     <string name="date">DATE:</string>
     <string name="save">Save</string>
 </resources>

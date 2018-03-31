@@ -12,8 +12,6 @@ import com.example.dragonmaster.knihajazd02.R;
 import com.example.dragonmaster.knihajazd02.model.Log;
 
 import java.text.SimpleDateFormat;
-import java.util.Collections;
-import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -61,7 +59,7 @@ public class LogJournal extends RealmRecyclerViewAdapter<Log, LogJournal.ViewHol
         TextView mDist;
 
 
-        public ViewHolder(View itemView) {
+        ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }

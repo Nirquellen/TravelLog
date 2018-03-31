@@ -23,18 +23,4 @@ public class Log extends RealmObject /*implements Comparable<Log>*/ {
     public String end;
     public String distance;
 
-    /*@Override
-    public int compareTo(@NonNull Log log) {
-        SimpleDateFormat format = new SimpleDateFormat("dd-MM-yyyy");
-        int compareResult = 0;
-        try {
-            Date date1 = format.parse(date);
-            Date date2 = format.parse(log.date);
-            compareResult = date1.compareTo(date2);
-        } catch (ParseException e) {
-            e.printStackTrace();
-            compareResult = date.compareTo(log.date);
-        }
-        return compareResult;
-    }*/
 }
