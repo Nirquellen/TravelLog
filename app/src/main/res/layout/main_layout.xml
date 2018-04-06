@@ -3,92 +3,102 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:focusable="true"
+    android:focusableInTouchMode="true">
 
-        <GridLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:context="com.example.dragonmaster.knihajazd02.activity.MainActivity"
-        android:rowCount="8"
-        android:columnCount="3"
-        android:layout_margin="8dp">
-
-        <TextView
-            android:text="@string/date" />
-        <EditText
-            android:id="@+id/date"
-            android:inputType="date"
-            android:focusable="false"
-            android:hint="@string/Date_hint"/>
-        <TextView
-            android:text="@string/from"
-            android:layout_row="1"
-            android:layout_column="0"/>
-
-        <EditText
-            android:id="@+id/startPoint"
+        <RelativeLayout
+            xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/starting_point"
-            android:textColorHint="@android:color/darker_gray" />
-        <TextView
-            android:text="@string/to"
-            android:layout_row="2"
-            android:layout_column="0"/>
-        <EditText
-            android:id="@+id/endPoint"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:hint="@string/ending_point"
-            android:textColorHint="@android:color/darker_gray" />
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_row="3"
-            android:layout_column="1"
-            android:text="@string/search" />
-    </GridLayout>
+            tools:context="com.example.dragonmaster.knihajazd02.activity.MainActivity"
+            android:paddingTop="8dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="8dp">
-        <TextView
-            android:text="@string/distance"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_row="4"
-            android:layout_column="0"/>
-        <EditText
-            android:id="@+id/result"
-            android:layout_column="1"
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:text="" />
-        <Button
-            android:id="@+id/save"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/save"/>
-    </LinearLayout>
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/date_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/Date_hint">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/date"
+                    android:inputType="date"
+                    android:focusable="false"
+                    android:layout_height="wrap_content"
+                    android:layout_width="150dp"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/start_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/starting_point"
+                android:layout_below="@id/date_layout">
+                <com.example.dragonmaster.knihajazd02.view.AutoCompleteTextInput
+                    android:id="@+id/startPoint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColorHint="@android:color/darker_gray" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/end_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/ending_point"
+                android:layout_below="@+id/start_layout">
+                <com.example.dragonmaster.knihajazd02.view.AutoCompleteTextInput
+                    android:id="@+id/endPoint"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColorHint="@android:color/darker_gray" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/distance_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="@string/distance_hint"
+                android:layout_below="@+id/end_layout"
+                android:layout_toLeftOf="@+id/save">
+
+                <EditText
+                    android:id="@+id/result"
+                    android:layout_width="150dp"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentStart="true" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/save"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:layout_alignTop="@id/distance_layout"
+                android:layout_alignParentEnd="true"
+                android:layout_margin="16dp"
+                android:src="@drawable/ic_done_black_24dp"/>
+    </RelativeLayout>
 
     <View
         android:layout_width="match_parent"
         android:layout_height="2dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:layout_marginBottom="16dp"
-        android:background="@color/colorAccent"/>
+        android:background="@color/colorPrimaryDark"/>
 
     <LinearLayout
         android:id="@+id/logs_wrapper"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:orientation="vertical"
-        android:visibility="gone">
+        android:orientation="vertical">
 
         <android.support.v7.widget.RecyclerView
             android:id="@android:id/list"

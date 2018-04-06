@@ -12,6 +12,7 @@ import com.example.dragonmaster.knihajazd02.R;
 import com.example.dragonmaster.knihajazd02.model.Log;
 
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -24,6 +25,7 @@ import io.realm.RealmRecyclerViewAdapter;
 
 public class LogJournal extends RealmRecyclerViewAdapter<Log, LogJournal.ViewHolder>  {
 
+    private static final String TAG = "LogJournal";
     private Context mContext;
 
     public LogJournal(Context context, @NonNull OrderedRealmCollection<Log> logs) {
@@ -41,11 +43,12 @@ public class LogJournal extends RealmRecyclerViewAdapter<Log, LogJournal.ViewHol
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Log log = getItem(position);
-        SimpleDateFormat format = new SimpleDateFormat("d. MMM. yyyy");
+        SimpleDateFormat format = new SimpleDateFormat("d. MMM. yyyy", Locale.getDefault());
         holder.mDate.setText(format.format(log.date));
         holder.mStart.setText(log.start);
         holder.mEnd.setText(log.end);
         holder.mDist.setText(log.distance);
+        android.util.Log.d(TAG, "onBindViewHolder: " + log.date);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

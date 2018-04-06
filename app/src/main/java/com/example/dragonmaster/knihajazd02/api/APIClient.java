@@ -13,7 +13,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class APIClient {
 
     public static final String GOOGLE_PLACE_API_KEY = "AIzaSyApPCrNoPDiB4Pvx3kiapZMQp3NUMqvexI";
-    private static String base_url = "https://maps.googleapis.com/maps/api/";
     private final ApiInterface mInterface;
 
 
@@ -22,6 +21,8 @@ public class APIClient {
         interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         OkHttpClient client = new OkHttpClient.Builder().readTimeout(30, TimeUnit.SECONDS)
                 .writeTimeout(30, TimeUnit.SECONDS).addInterceptor(interceptor).build();
+
+        String base_url = "https://maps.googleapis.com/maps/api/";
 
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(base_url)
