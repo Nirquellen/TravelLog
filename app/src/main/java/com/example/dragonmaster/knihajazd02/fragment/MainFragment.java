@@ -2,6 +2,7 @@ package com.example.dragonmaster.knihajazd02.fragment;
 
 import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.pm.PackageManager;
@@ -18,14 +19,13 @@ import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewParent;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
 import android.widget.AutoCompleteTextView;
-import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.example.dragonmaster.knihajazd02.R;
@@ -60,7 +60,6 @@ import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
-import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 
@@ -86,7 +85,7 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
     private Integer mId = null;
     private View mHighlighted = null;
     private Realm mRealm;
-    private SimpleDateFormat format = new SimpleDateFormat("d. MMM. yyyy", Locale.getDefault());
+    private SimpleDateFormat format = new SimpleDateFormat("d. MMM. yyyy HH:mm", Locale.getDefault());
     private Unbinder mUnbinder;
 
     @BindView(R.id.result) EditText result;
@@ -160,6 +159,10 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
                     saveResult(mLog);
                 else
                     Toast.makeText(getActivity(), "Please, fill in the date", Toast.LENGTH_SHORT).show();
+                mStartPoint.setText("");
+                mEndPoint.setText("");
+                date.setText("");
+                result.setText("");
             }
         });
 
@@ -274,13 +277,22 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
     }
 
     DatePickerDialog.OnDateSetListener dateListener = new DatePickerDialog.OnDateSetListener() {
-
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear,
                               int dayOfMonth) {
             mCalendar.set(Calendar.YEAR, year);
             mCalendar.set(Calendar.MONTH, monthOfYear);
             mCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
+            new TimePickerDialog(getActivity(), timeListener, mCalendar.get(Calendar.HOUR_OF_DAY), mCalendar.get(Calendar.MINUTE), true).show();
+            //date.setText(format.format(mCalendar.getTime()));
+        }
+    };
+
+    TimePickerDialog.OnTimeSetListener timeListener = new TimePickerDialog.OnTimeSetListener() {
+        @Override
+        public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+            mCalendar.set(Calendar.HOUR_OF_DAY, hourOfDay);
+            mCalendar.set(Calendar.MINUTE, minute);
             date.setText(format.format(mCalendar.getTime()));
         }
     };

@@ -1,13 +1,7 @@
 <resources>
     <string name="app_name">Travel Log</string>
-    <string name="from">FROM: </string>
     <string name="starting_point">Starting point</string>
     <string name="ending_point">Ending point</string>
-    <string name="to">TO: </string>
-    <string name="search">Search</string>
-    <string name="distance">DISTANCE:</string>
     <string name="Date_hint">Date</string>
-    <string name="date">DATE:</string>
-    <string name="save">Save</string>
     <string name="distance_hint">Distance</string>
 </resources>

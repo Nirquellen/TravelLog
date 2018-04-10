@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.example.dragonmaster.knihajazd02.R;
 import com.example.dragonmaster.knihajazd02.model.Log;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -43,23 +44,35 @@ public class LogJournal extends RealmRecyclerViewAdapter<Log, LogJournal.ViewHol
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Log log = getItem(position);
-        SimpleDateFormat format = new SimpleDateFormat("d. MMM. yyyy", Locale.getDefault());
-        holder.mDate.setText(format.format(log.date));
-        holder.mStart.setText(log.start);
-        holder.mEnd.setText(log.end);
+        SimpleDateFormat format = new SimpleDateFormat("MMM", Locale.getDefault());
+        holder.mMonth.setText(format.format(log.date));
+        format = new SimpleDateFormat("d", Locale.getDefault());
+        holder.mDay.setText(format.format(log.date));
+        format = new SimpleDateFormat("HH", Locale.getDefault());
+        holder.mHours.setText(format.format(log.date));
+        format = new SimpleDateFormat("mm", Locale.getDefault());
+        holder.mMinutes.setText(format.format(log.date));
+        holder.mStart.setText(log.start.replaceAll(",.*", ""));
+        holder.mEnd.setText(log.end.replaceAll(",.*", ""));
         holder.mDist.setText(log.distance);
         android.util.Log.d(TAG, "onBindViewHolder: " + log.date);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.logDate)
-        TextView mDate;
+        @BindView(R.id.month)
+        TextView mMonth;
+        @BindView(R.id.day)
+        TextView mDay;
         @BindView(R.id.logFrom)
         TextView mStart;
         @BindView(R.id.logTo)
         TextView mEnd;
         @BindView(R.id.distance)
         TextView mDist;
+        @BindView(R.id.hours)
+        TextView mHours;
+        @BindView(R.id.minutes)
+        TextView mMinutes;
 
 
         ViewHolder(View itemView) {

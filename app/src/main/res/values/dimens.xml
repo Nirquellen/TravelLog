@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="log_font_size">18sp</dimen>
+    <dimen name="calendar_size">60dp</dimen>
+    <dimen name="calendar_top_size">40dp</dimen>
+</resources>

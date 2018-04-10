@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Travel Log</string>
+    <string name="starting_point">Štart</string>
+    <string name="ending_point">Cieľ</string>
+    <string name="Date_hint">Dátum</string>
+    <string name="distance_hint">Vzdialenosť</string>
+</resources>
