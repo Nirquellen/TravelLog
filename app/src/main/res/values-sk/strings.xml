@@ -2,6 +2,10 @@
     <string name="app_name">Travel Log</string>
     <string name="starting_point">Štart</string>
     <string name="ending_point">Cieľ</string>
-    <string name="Date_hint">Dátum</string>
+    <string name="date_hint">Dátum</string>
     <string name="distance_hint">Vzdialenosť</string>
+    <string name="amount_hint">Natankované množstvo</string>
+    <string name="menu_settings">Nastavenia</string>
+    <string name="date_toast">Prosím, vyplňte dátum</string>
+    <string name="amount_toast">prosím, vyplňte natankované množstvo</string>
 </resources>

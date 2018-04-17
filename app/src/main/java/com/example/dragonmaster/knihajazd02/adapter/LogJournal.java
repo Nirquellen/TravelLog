@@ -3,9 +3,13 @@ package com.example.dragonmaster.knihajazd02.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.dragonmaster.knihajazd02.R;
@@ -24,7 +28,7 @@ import io.realm.RealmRecyclerViewAdapter;
  * Created by Dragon Master on 23.3.2018.
  */
 
-public class LogJournal extends RealmRecyclerViewAdapter<Log, LogJournal.ViewHolder>  {
+public class LogJournal extends RealmRecyclerViewAdapter<Log, LogJournal.ViewHolder> {
 
     private static final String TAG = "LogJournal";
     private Context mContext;
@@ -34,8 +38,9 @@ public class LogJournal extends RealmRecyclerViewAdapter<Log, LogJournal.ViewHol
         mContext = context;
     }
 
+    @NonNull
     @Override
-    public LogJournal.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public LogJournal.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         mContext = parent.getContext();
         return new ViewHolder(LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.log_layout, parent, false));
@@ -55,7 +60,6 @@ public class LogJournal extends RealmRecyclerViewAdapter<Log, LogJournal.ViewHol
         holder.mStart.setText(log.start.replaceAll(",.*", ""));
         holder.mEnd.setText(log.end.replaceAll(",.*", ""));
         holder.mDist.setText(log.distance);
-        android.util.Log.d(TAG, "onBindViewHolder: " + log.date);
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -73,11 +77,14 @@ public class LogJournal extends RealmRecyclerViewAdapter<Log, LogJournal.ViewHol
         TextView mHours;
         @BindView(R.id.minutes)
         TextView mMinutes;
+        //@BindView(R.id.log_menu)
+        //Button mMenu;
 
 
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            //mMenu.setOnClickListener(this);
         }
     }
 }

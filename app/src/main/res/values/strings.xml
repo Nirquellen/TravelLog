@@ -2,6 +2,10 @@
     <string name="app_name">Travel Log</string>
     <string name="starting_point">Starting point</string>
     <string name="ending_point">Ending point</string>
-    <string name="Date_hint">Date</string>
+    <string name="date_hint">Date</string>
     <string name="distance_hint">Distance</string>
+    <string name="amount_hint">Fuel amount</string>
+    <string name="menu_settings">Settings</string>
+    <string name="date_toast">Please fill in the date</string>
+    <string name="amount_toast">Please fill in the fuel amount</string>
 </resources>

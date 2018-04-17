@@ -47,7 +47,6 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import butterknife.Unbinder;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -57,9 +56,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.PendingResult;
 import com.google.android.gms.common.api.ResultCallback;
+import com.google.android.gms.location.places.AutocompleteFilter;
 import com.google.android.gms.location.places.PlaceBuffer;
 import com.google.android.gms.location.places.Places;
 
@@ -67,9 +66,9 @@ import com.google.android.gms.location.places.Places;
  * Created by Dragon Master on 29.3.2018.
  */
 
-public class MainFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks{
+public class TravelFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks{
 
-    private static final String LOG_TAG = "MainFragment";
+    private static final String LOG_TAG = "TravelFragment";
     private static final int GOOGLE_API_CLIENT_ID = 0;
     private GoogleApiClient mGoogleApiClient;
     private PlaceArrayAdapter mPlaceArrayAdapter;
@@ -98,8 +97,8 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
     @BindView(R.id.startPoint) AutoCompleteTextView mStartPoint;
     @BindView(R.id.endPoint) AutoCompleteTextView mEndPoint;
 
-    public static MainFragment newInstance() {
-        return new MainFragment();
+    public static TravelFragment newInstance() {
+        return new TravelFragment();
     }
 
     @Override
@@ -118,7 +117,7 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.main_layout, container, false);
+        View view = inflater.inflate(R.layout.travel_layout, container, false);
         mUnbinder = ButterKnife.bind(this, view);
 
         permissionsToRequest = findUnAskedPermissions(permissions);
@@ -158,7 +157,7 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
                 if(mLog.date != null)
                     saveResult(mLog);
                 else
-                    Toast.makeText(getActivity(), "Please, fill in the date", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(), "@strings/date_toast", Toast.LENGTH_SHORT).show();
                 mStartPoint.setText("");
                 mEndPoint.setText("");
                 date.setText("");
@@ -196,7 +195,10 @@ public class MainFragment extends Fragment implements GoogleApiClient.OnConnecti
         mEndPoint.setThreshold(3);
         mStartPoint.setOnItemClickListener(mAutoCompleteClickListener);
         mEndPoint.setOnItemClickListener(mAutoCompleteClickListener);
-        mPlaceArrayAdapter = new PlaceArrayAdapter(getActivity(), android.R.layout.simple_list_item_1,null);
+        AutocompleteFilter mFilter = new AutocompleteFilter.Builder()
+                .setTypeFilter(AutocompleteFilter.TYPE_FILTER_CITIES)
+                .build();
+        mPlaceArrayAdapter = new PlaceArrayAdapter(getActivity(), android.R.layout.simple_list_item_1, mFilter);
         mStartPoint.setAdapter(mPlaceArrayAdapter);
         mEndPoint.setAdapter(mPlaceArrayAdapter);
 

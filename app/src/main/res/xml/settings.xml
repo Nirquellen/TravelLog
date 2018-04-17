@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <PreferenceCategory
+        android:title="Car Settings">
+        <Preference
+            android:title="Licence Plate"
+            android:key="licence_plate"
+            android:order="0"/>
+
+        <Preference
+            android:title="Car Consumption"
+            android:key="consumption"
+            android:order="1"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory
+        android:title="Export Settings">
+
+        <SwitchPreference
+            android:title="something"
+            android:key="pref_bar"
+            android:enabled="false"
+            android:order="2"/>
+
+    </PreferenceCategory>
+
+</PreferenceScreen>

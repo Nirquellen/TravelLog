@@ -22,5 +22,4 @@ public class Log extends RealmObject /*implements Comparable<Log>*/ {
     public String start;
     public String end;
     public String distance;
-
 }
