@@ -1,18 +1,13 @@
 package com.example.dragonmaster.knihajazd02.fragment;
 
-import android.annotation.TargetApi;
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -31,7 +26,6 @@ import android.widget.Toast;
 import com.example.dragonmaster.knihajazd02.R;
 import com.example.dragonmaster.knihajazd02.adapter.LogJournal;
 import com.example.dragonmaster.knihajazd02.adapter.PlaceArrayAdapter;
-import com.example.dragonmaster.knihajazd02.adapter.RecyclerItemClickListener;
 import com.example.dragonmaster.knihajazd02.api.APIClient;
 import com.example.dragonmaster.knihajazd02.api.ResultDistanceMatrix;
 import com.example.dragonmaster.knihajazd02.model.Log;
@@ -39,7 +33,6 @@ import com.google.android.gms.common.api.GoogleApiClient;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Locale;
@@ -66,17 +59,13 @@ import com.google.android.gms.location.places.Places;
  * Created by Dragon Master on 29.3.2018.
  */
 
-public class TravelFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks{
+public class TravelFragment extends Fragment implements GoogleApiClient.OnConnectionFailedListener, GoogleApiClient.ConnectionCallbacks, LogJournal.OnPopUpMenuClickedListener {
 
     private static final String LOG_TAG = "TravelFragment";
     private static final int GOOGLE_API_CLIENT_ID = 0;
     private GoogleApiClient mGoogleApiClient;
     private PlaceArrayAdapter mPlaceArrayAdapter;
 
-    private ArrayList<String> permissionsToRequest;
-    private ArrayList<String> permissionsRejected = new ArrayList<>();
-    private ArrayList<String> permissions = new ArrayList<>();
-    private final static int ALL_PERMISSIONS_RESULT = 101;
     private APIClient mClient;
     private Calendar mCalendar;
     private LogJournal mLogJournal;
@@ -120,12 +109,6 @@ public class TravelFragment extends Fragment implements GoogleApiClient.OnConnec
         View view = inflater.inflate(R.layout.travel_layout, container, false);
         mUnbinder = ButterKnife.bind(this, view);
 
-        permissionsToRequest = findUnAskedPermissions(permissions);
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            if (permissionsToRequest.size() > 0)
-                requestPermissions(permissionsToRequest.toArray(new String[permissionsToRequest.size()]), ALL_PERMISSIONS_RESULT);
-        }
-
         date.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -166,30 +149,10 @@ public class TravelFragment extends Fragment implements GoogleApiClient.OnConnec
         });
 
         final RealmResults<Log> logs = mRealm.where(Log.class).sort("date", Sort.DESCENDING).findAll();
-        mLogJournal = new LogJournal(getActivity(), logs);
+        mLogJournal = new LogJournal(getActivity(), logs, this);
         mList.setAdapter(mLogJournal);
         mList.setLayoutManager(new LinearLayoutManager(getActivity()));
         mList.setHasFixedSize(true);
-
-        mList.addOnItemTouchListener(
-                new RecyclerItemClickListener(getActivity(), mList ,new RecyclerItemClickListener.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(View view, int position) {
-                    }
-                    @Override public void onLongItemClick(View view, int position) {
-                        mHighlighted = view;
-                        mHighlighted.setBackgroundResource(R.color.colorSecondaryLight);
-                        Log edit = logs.get(position);
-                        if(edit != null) {
-                            mStartPoint.setText(edit.start);
-                            mEndPoint.setText(edit.end);
-                            result.setText(edit.distance);
-                            mId = edit.id;
-                            date.setText(format.format(edit.date));
-                        }
-                    }
-                })
-        );
 
         mStartPoint.setThreshold(3);
         mEndPoint.setThreshold(3);
@@ -268,16 +231,6 @@ public class TravelFragment extends Fragment implements GoogleApiClient.OnConnec
         mRealm.close();
     }
 
-    private ArrayList<String> findUnAskedPermissions(ArrayList<String> wanted) {
-        ArrayList<String> result = new ArrayList<>();
-        for (String perm : wanted) {
-            if (!hasPermission(perm)) {
-                result.add(perm);
-            }
-        }
-        return result;
-    }
-
     DatePickerDialog.OnDateSetListener dateListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear,
@@ -298,60 +251,6 @@ public class TravelFragment extends Fragment implements GoogleApiClient.OnConnec
             date.setText(format.format(mCalendar.getTime()));
         }
     };
-
-    private boolean hasPermission(String permission) {
-        if (canMakeSmores()) {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                return (getActivity().checkSelfPermission(permission) == PackageManager.PERMISSION_GRANTED);
-            }
-        }
-        return true;
-    }
-
-    private boolean canMakeSmores() {
-        return (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1);
-    }
-
-
-    @TargetApi(Build.VERSION_CODES.M)
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        switch (requestCode) {
-            case ALL_PERMISSIONS_RESULT:
-                for (String perms : permissionsToRequest) {
-                    if (!hasPermission(perms)) {
-                        permissionsRejected.add(perms);
-                    }
-                }
-                if (permissionsRejected.size() > 0) {
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                        if (shouldShowRequestPermissionRationale(permissionsRejected.get(0))) {
-                            showMessageOKCancel("These permissions are mandatory for the application. Please allow access.",
-                                    new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                                                requestPermissions(permissionsRejected.toArray(new String[permissionsRejected.size()]), ALL_PERMISSIONS_RESULT);
-                                            }
-                                        }
-                                    });
-                            return;
-                        }
-                    }
-                }
-                break;
-        }
-
-    }
-
-    private void showMessageOKCancel(String message, DialogInterface.OnClickListener okListener) {
-        new AlertDialog.Builder(getActivity())
-                .setMessage(message)
-                .setPositiveButton("OK", okListener)
-                .setNegativeButton("Cancel", null)
-                .create()
-                .show();
-    }
 
     private void fetchDistance() {
 
@@ -403,8 +302,47 @@ public class TravelFragment extends Fragment implements GoogleApiClient.OnConnec
             mRealm = Realm.getDefaultInstance();
             mRealm.executeTransaction(new Realm.Transaction() {
                 @Override
-                public void execute(Realm realm) {
+                public void execute(@NonNull Realm realm) {
                     realm.insertOrUpdate(log);
+                }
+            });
+        } finally {
+            if(mRealm != null) {
+                mRealm.close();
+            }
+        }
+    }
+
+    @Override
+    public void onEditClicked(View view, Log log) {
+        editLog(view, log);
+    }
+
+    @Override
+    public void onDeleteClicked(Log log) {
+        deleteLog(log);
+    }
+
+    private void editLog(View view, Log edit) {
+        mHighlighted = view;
+        mHighlighted.setBackgroundResource(R.color.colorSecondaryLight);
+        if(edit != null) {
+            mStartPoint.setText(edit.start);
+            mEndPoint.setText(edit.end);
+            result.setText(edit.distance);
+            mId = edit.id;
+            date.setText(format.format(edit.date));
+        }
+    }
+
+    private void deleteLog(final Log log) {
+        try {
+            mRealm = Realm.getDefaultInstance();
+            mRealm.executeTransaction(new Realm.Transaction() {
+                @Override
+                public void execute(@NonNull Realm realm) {
+                    RealmResults<Log> result = realm.where(Log.class).equalTo("id", log.id).findAll();
+                    result.deleteAllFromRealm();
                 }
             });
         } finally {

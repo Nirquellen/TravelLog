@@ -23,7 +23,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/D:/Programmes/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/maps/ic_local_gas_station_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/D:/Programmes/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_picture_as_pdf_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -34,7 +34,7 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="ffffff" />
-                            <entry key="outputName" value="ic_local_gas_station_24dp" />
+                            <entry key="outputName" value="ic_picture_as_pdf_24dp" />
                             <entry key="sourceFile" value="C:\Users\Dragon Master" />
                           </map>
                         </option>

@@ -6,6 +6,16 @@
     <string name="distance_hint">Vzdialenosť</string>
     <string name="amount_hint">Natankované množstvo</string>
     <string name="menu_settings">Nastavenia</string>
+    <string name="menu_export">Vytvoriť .PDF</string>
     <string name="date_toast">Prosím, vyplňte dátum</string>
     <string name="amount_toast">prosím, vyplňte natankované množstvo</string>
+    <string name="km_left_1">Na základe spotreby vám chýba ešte %d km.</string>
+    <string name="okay">Rozumiem</string>
+    <string name="pdf_export_question">Naozaj chcete exportovať váš Travel Log ako .PDF?</string>
+    <string name="yes">Áno</string>
+    <string name="no">Nie</string>
+    <string name="pdf_exported">Vaše .PDF bolo úspešne vytvorené.</string>
+    <string name="licence_plate">Štátna poznávacia značka</string>
+    <string name="car_consumption">Spotreba</string>
+    <string name="transfer">Prenos</string>
 </resources>

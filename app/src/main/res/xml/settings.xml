@@ -3,14 +3,18 @@
 
     <PreferenceCategory
         android:title="Car Settings">
-        <Preference
-            android:title="Licence Plate"
+        <EditTextPreference
+            android:title="@string/licence_plate"
             android:key="licence_plate"
-            android:order="0"/>
+            android:inputType="textCapCharacters|number"
+            android:order="0"
+            android:hint="@string/licence_plate"/>
 
-        <Preference
-            android:title="Car Consumption"
+        <EditTextPreference
+            android:title="@string/car_consumption"
             android:key="consumption"
+            android:summary="Enter your car consumtpion here"
+            android:inputType="numberDecimal"
             android:order="1"/>
 
     </PreferenceCategory>
@@ -18,11 +22,12 @@
     <PreferenceCategory
         android:title="Export Settings">
 
-        <SwitchPreference
-            android:title="something"
-            android:key="pref_bar"
-            android:enabled="false"
-            android:order="2"/>
+        <EditTextPreference
+            android:title="@string/transfer"
+            android:key="transfer"
+            android:inputType="number"
+            android:order="2"
+            android:hint="@string/transfer"/>
 
     </PreferenceCategory>
 

@@ -84,7 +84,7 @@
                 android:layout_alignTop="@id/distance_layout"
                 android:layout_alignParentEnd="true"
                 android:layout_margin="16dp"
-                android:src="@drawable/ic_done_black_24dp"/>
+                android:src="@drawable/ic_done_24dp"/>
     </RelativeLayout>
 
     <View

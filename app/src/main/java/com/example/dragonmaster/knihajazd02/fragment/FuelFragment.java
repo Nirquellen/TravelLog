@@ -49,8 +49,8 @@ public class FuelFragment extends Fragment {
     @BindView(R.id.fuels_save)
     FloatingActionButton mSave;
 
-    public static TravelFragment newInstance() {
-        return new TravelFragment();
+    public static FuelFragment newInstance() {
+        return new FuelFragment();
     }
 
     @Override
