@@ -20,6 +20,7 @@ import android.widget.AutoCompleteTextView;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -40,6 +41,7 @@ import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -79,7 +81,7 @@ public class TravelFragment extends Fragment implements GoogleApiClient.OnConnec
     @BindView(R.id.result) EditText result;
     @BindView(R.id.date) EditText date;
 
-    @BindView(R.id.save) FloatingActionButton save;
+    @BindView(R.id.layout_focus) RelativeLayout mLayout;
     @BindView(R.id.logs_wrapper) LinearLayout mLogsWrapper;
     @BindView(android.R.id.list) RecyclerView mList;
 
@@ -109,45 +111,6 @@ public class TravelFragment extends Fragment implements GoogleApiClient.OnConnec
         View view = inflater.inflate(R.layout.travel_layout, container, false);
         mUnbinder = ButterKnife.bind(this, view);
 
-        date.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                new DatePickerDialog(getActivity(), dateListener,
-                        mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH)).show();
-            }
-        });
-        save.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (getActivity().getCurrentFocus() != null) {
-                    InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
-                    if (imm != null)
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                }
-                Log mLog = new Log();
-                try {
-                    mLog.date = format.parse(date.getText().toString());
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
-                mLog.start = mStartPoint.getText().toString();
-                mLog.end = mEndPoint.getText().toString();
-                mLog.distance = mDistance;
-                if(mId == null)
-                    mLog.id = mLogJournal.getItemCount();
-                else
-                    mLog.id = mId;
-                if(mLog.date != null)
-                    saveResult(mLog);
-                else
-                    Toast.makeText(getActivity(), "@strings/date_toast", Toast.LENGTH_SHORT).show();
-                mStartPoint.setText("");
-                mEndPoint.setText("");
-                date.setText("");
-                result.setText("");
-            }
-        });
-
         final RealmResults<Log> logs = mRealm.where(Log.class).sort("date", Sort.DESCENDING).findAll();
         mLogJournal = new LogJournal(getActivity(), logs, this);
         mList.setAdapter(mLogJournal);
@@ -166,6 +129,47 @@ public class TravelFragment extends Fragment implements GoogleApiClient.OnConnec
         mEndPoint.setAdapter(mPlaceArrayAdapter);
 
         return view;
+    }
+
+    @OnClick(R.id.date)
+    public void onDateClick(View view) {
+        new DatePickerDialog(getActivity(), dateListener,
+                mCalendar.get(Calendar.YEAR), mCalendar.get(Calendar.MONTH), mCalendar.get(Calendar.DAY_OF_MONTH)).show();
+    }
+
+    @OnClick(R.id.save)
+    public void onSaveButtonClick(View view) {
+        if (getActivity().getCurrentFocus() != null) {
+            InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+            if (imm != null)
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        }
+        Log mLog = new Log();
+        if(date.getText().toString().isEmpty() || mStartPoint.getText().toString().isEmpty() ||
+                mEndPoint.getText().toString().isEmpty() || result.getText().toString().isEmpty()) {
+            Toast.makeText(getActivity(), R.string.log_missing, Toast.LENGTH_SHORT).show();
+        } else {
+            try {
+                mLog.date = format.parse(date.getText().toString());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+            mLog.start = mStartPoint.getText().toString();
+            mLog.end = mEndPoint.getText().toString();
+            mLog.distance = result.getText().toString();
+            if (mId == null)
+                mLog.id = (int) (mRealm.where(Log.class).max("id")) + 1;
+            else
+                mLog.id = mId;
+            if (mLog.date != null)
+                saveResult(mLog);
+            else
+                Toast.makeText(getActivity(), "@strings/date_toast", Toast.LENGTH_SHORT).show();
+            mStartPoint.setText("");
+            mEndPoint.setText("");
+            date.setText("");
+            result.setText("");
+        }
     }
 
     private AdapterView.OnItemClickListener mAutoCompleteClickListener
@@ -191,7 +195,7 @@ public class TravelFragment extends Fragment implements GoogleApiClient.OnConnec
                         places.getStatus().toString());
             }
             if(!TextUtils.isEmpty(mStartPoint.getText()) && !TextUtils.isEmpty(mEndPoint.getText())) {
-                save.requestFocus();
+                mLayout.requestFocus();
                 fetchDistance();
             }
         }
@@ -278,7 +282,7 @@ public class TravelFragment extends Fragment implements GoogleApiClient.OnConnec
                         ResultDistanceMatrix.InfoDistanceMatrix.ValueItem itemDistance = distanceElement.distance;
                         //String totalDuration = String.valueOf(itemDuration.text);
                         mDistance = String.valueOf(itemDistance.text);
-                        result.setText(mDistance);
+                        result.setText(mDistance.replaceAll("[^0-9.]", ""));
                     } else {
                         result.setText(distanceElement.status);
                     }
@@ -324,6 +328,9 @@ public class TravelFragment extends Fragment implements GoogleApiClient.OnConnec
     }
 
     private void editLog(View view, Log edit) {
+        if(mHighlighted != null) {
+            mHighlighted.setBackgroundResource(0);
+        }
         mHighlighted = view;
         mHighlighted.setBackgroundResource(R.color.colorSecondaryLight);
         if(edit != null) {

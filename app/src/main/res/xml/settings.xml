@@ -2,29 +2,31 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
 
     <PreferenceCategory
-        android:title="Car Settings">
+        android:title="@string/car_settings">
         <EditTextPreference
             android:title="@string/licence_plate"
             android:key="licence_plate"
-            android:inputType="textCapCharacters|number"
+            android:summary="@string/plate_sum"
+            android:inputType="textCapCharacters"
             android:order="0"
             android:hint="@string/licence_plate"/>
 
         <EditTextPreference
             android:title="@string/car_consumption"
             android:key="consumption"
-            android:summary="Enter your car consumtpion here"
+            android:summary="@string/consumption_sum"
             android:inputType="numberDecimal"
             android:order="1"/>
 
     </PreferenceCategory>
 
     <PreferenceCategory
-        android:title="Export Settings">
+        android:title="@string/export_settings">
 
         <EditTextPreference
             android:title="@string/transfer"
             android:key="transfer"
+            android:summary="@string/transfer_sum"
             android:inputType="number"
             android:order="2"
             android:hint="@string/transfer"/>

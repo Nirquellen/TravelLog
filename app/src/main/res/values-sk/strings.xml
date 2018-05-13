@@ -18,4 +18,20 @@
     <string name="licence_plate">Štátna poznávacia značka</string>
     <string name="car_consumption">Spotreba</string>
     <string name="transfer">Prenos</string>
+    <string name="write_permission_title">Je potrebné udeliť povolenie</string>
+    <string name="write_permission_text">Aplikácia potrebuje zapisovať to externej pamäte telefónu kvôli ukladaniu Vášho .PDF.</string>
+    <string name="preference_missing">Prosím, skontrolujte, či ste vyplnili všetky informácie v Nastaveniach</string>
+    <string name="pdf_done">.PDF bolo úspešne exportované</string>
+    <string name="pdf_not_done">Pri exporte .PDF sa vyskytla chyba</string>
+    <string name="log_missing">Všetky informácie musia byť vyplnené</string>
+    <string name="calendar">kalendár</string>
+    <string name="gas_station_icon">ikona čerpacej stanice</string>
+    <string name="menu_button">tlačítko menu</string>
+    <string name="clock">čas</string>
+    <string name="km">km</string>
+    <string name="transfer_sum">Zadajte prenos km z minulého roku</string>
+    <string name="consumption_sum">Zadajte spotrebu auta</string>
+    <string name="plate_sum">Zadajte ŠPZ auta</string>
+    <string name="export_settings">Nastavenia Exportu</string>
+    <string name="car_settings">Nastavenia Auta</string>
 </resources>

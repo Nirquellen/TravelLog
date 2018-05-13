@@ -18,4 +18,20 @@
     <string name="licence_plate">Licence plate</string>
     <string name="car_consumption">Car consumption</string>
     <string name="transfer">Transfer</string>
+    <string name="write_permission_title">Granting the permission needed</string>
+    <string name="write_permission_text">The app needs to write to the external storage to save your .PDF.</string>
+    <string name="preference_missing">Please, check if you filled in all the information in Settings</string>
+    <string name="pdf_done">.PDF exported successfully</string>
+    <string name="pdf_not_done">Error occurred when exporting .PDF</string>
+    <string name="log_missing">All the information have to be filled in</string>
+    <string name="calendar">calendar</string>
+    <string name="gas_station_icon">gas station icon</string>
+    <string name="menu_button">menu button</string>
+    <string name="clock">clock</string>
+    <string name="km">km</string>
+    <string name="transfer_sum">Enter km transfer from previous year here</string>
+    <string name="consumption_sum">Enter your car consumtpion here</string>
+    <string name="plate_sum">Enter your licence plate here</string>
+    <string name="export_settings">Export Settings</string>
+    <string name="car_settings">Car Settings</string>
 </resources>
