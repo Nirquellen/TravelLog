@@ -4,20 +4,16 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.PopupMenu;
 import android.support.v7.widget.RecyclerView;
-import android.view.ContextMenu;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.dragonmaster.knihajazd02.R;
 import com.example.dragonmaster.knihajazd02.model.Log;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -125,8 +121,4 @@ public class LogJournal extends RealmRecyclerViewAdapter<Log, LogJournal.ViewHol
         void onEditClicked(View v, Log log);
         void onDeleteClicked(Log log);
     }
-    //interface on pop up menu clicked
-    //metody on edit a on delete clicked
-    //bude implementovat fragment
-    //switch, volat mlistener.oneditclicked / to sa zavola vo fragmente
 }

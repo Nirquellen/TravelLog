@@ -6,7 +6,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -209,7 +208,7 @@ public class TravelFragment extends Fragment implements GoogleApiClient.OnConnec
     }
 
     @Override
-    public void onConnectionFailed(ConnectionResult connectionResult) {
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         android.util.Log.e(LOG_TAG, "Google Places API connection failed with error code: "
                 + connectionResult.getErrorCode());
 
@@ -278,9 +277,7 @@ public class TravelFragment extends Fragment implements GoogleApiClient.OnConnec
                     ResultDistanceMatrix.InfoDistanceMatrix infoDistanceMatrix = resultDistance.rows.get(0);
                     ResultDistanceMatrix.InfoDistanceMatrix.DistanceElement distanceElement = infoDistanceMatrix.elements.get(0);
                     if ("OK".equalsIgnoreCase(distanceElement.status)) {
-                        //ResultDistanceMatrix.InfoDistanceMatrix.ValueItem itemDuration = distanceElement.duration;
                         ResultDistanceMatrix.InfoDistanceMatrix.ValueItem itemDistance = distanceElement.distance;
-                        //String totalDuration = String.valueOf(itemDuration.text);
                         mDistance = String.valueOf(itemDistance.text);
                         result.setText(mDistance.replaceAll("[^0-9.]", ""));
                     } else {
@@ -358,22 +355,4 @@ public class TravelFragment extends Fragment implements GoogleApiClient.OnConnec
             }
         }
     }
-
-    /*@Override
-    public void onSaveInstanceState(Bundle outState)
-    {
-        outState.putString("from", start.getText().toString());
-        outState.putString("to", end.getText().toString());
-        outState.putString("result", result.getText().toString());
-        super.onSaveInstanceState(outState);
-    }
-
-    @Override
-    public void onRestoreInstanceState(Bundle savedInstanceState)
-    {
-        super.onRestoreInstanceState(savedInstanceState);
-        start.setText(savedInstanceState.getString("from"));
-        end.setText(savedInstanceState.getString("to"));
-        result.setText(savedInstanceState.getString("result"));
-    }*/
 }

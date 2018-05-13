@@ -2,11 +2,9 @@ package com.example.dragonmaster.knihajazd02.fragment;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.EditTextPreference;
 import android.preference.PreferenceFragment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.example.dragonmaster.knihajazd02.R;
 

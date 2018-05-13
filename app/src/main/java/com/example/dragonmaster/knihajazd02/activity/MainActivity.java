@@ -203,14 +203,11 @@ public class MainActivity extends AppCompatActivity{
         Transfer mTransfer = new Transfer();
         mTransfer.value = Float.valueOf(mSharedPreferences.getString("transfer", null));
 
-        // step 1
         Document document = new Document(PageSize.A4.rotate());
-        // step 2
         File rootDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
         rootDir.mkdirs();
         File file = new File(rootDir, "kniha_jazd.pdf");
         PdfWriter.getInstance(document, new FileOutputStream(file));
-        // step 3
         document.open();
 
         float[] columnWidths = {1.5f, 1, 1, 2.5f, 2.5f, 1.5f, 1.5f, 1.2f};

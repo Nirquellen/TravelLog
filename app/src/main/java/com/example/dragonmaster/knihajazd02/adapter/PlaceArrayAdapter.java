@@ -81,7 +81,6 @@ public class PlaceArrayAdapter extends ArrayAdapter<PlaceArrayAdapter.PlaceAutoc
                 resultList.add(new PlaceAutocomplete(prediction.getPlaceId(),
                         prediction.getFullText(null)));
             }
-            // Buffer release
             autocompletePredictions.release();
             return resultList;
         }

@@ -5,7 +5,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -19,7 +18,6 @@ import android.widget.Toast;
 
 import com.example.dragonmaster.knihajazd02.R;
 import com.example.dragonmaster.knihajazd02.adapter.FuelAdapter;
-import com.example.dragonmaster.knihajazd02.adapter.RecyclerItemClickListener;
 import com.example.dragonmaster.knihajazd02.model.Fuel;
 
 import java.text.ParseException;
@@ -48,7 +46,6 @@ public class FuelFragment extends Fragment implements FuelAdapter.OnPopUpMenuCli
     @BindView(android.R.id.list) RecyclerView mList;
     @BindView(R.id.fuels_date) EditText mDate;
     @BindView(R.id.fuels_amount) EditText mAmount;
-    //@BindView(R.id.fuels_save)
 
     public static FuelFragment newInstance() {
         return new FuelFragment();
@@ -97,7 +94,7 @@ public class FuelFragment extends Fragment implements FuelAdapter.OnPopUpMenuCli
             } catch (ParseException e) {
                 e.printStackTrace();
             }
-            if (!mAmount.getText().equals(""))
+            if (!mAmount.getText().toString().isEmpty())
                 mFuel.amount = mAmount.getText().toString();
             else
                 Toast.makeText(getActivity(), "@strings/amount_toast", Toast.LENGTH_SHORT).show();
