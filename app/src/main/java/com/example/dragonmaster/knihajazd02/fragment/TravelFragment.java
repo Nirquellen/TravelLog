@@ -157,7 +157,7 @@ public class TravelFragment extends Fragment implements GoogleApiClient.OnConnec
             mLog.end = mEndPoint.getText().toString();
             mLog.distance = result.getText().toString();
             if (mId == null)
-                mLog.id = (int) (mRealm.where(Log.class).max("id")) + 1;
+                mLog.id = (mRealm.where(Log.class).count() > 0) ? (mRealm.where(Log.class).max("id")).intValue() + 1 : 1;
             else
                 mLog.id = mId;
             if (mLog.date != null)
