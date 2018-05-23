@@ -99,7 +99,7 @@ public class FuelFragment extends Fragment implements FuelAdapter.OnPopUpMenuCli
             else
                 Toast.makeText(getActivity(), "@strings/amount_toast", Toast.LENGTH_SHORT).show();
             if (mId == null)
-                mFuel.id = (int) (mRealm.where(Fuel.class).max("id")) + 1;
+                mFuel.id = (mRealm.where(Fuel.class).count() > 0) ? (mRealm.where(Fuel.class).max("id")).intValue() + 1 : 1;
             else
                 mFuel.id = mId;
             if (mFuel.date != null)
