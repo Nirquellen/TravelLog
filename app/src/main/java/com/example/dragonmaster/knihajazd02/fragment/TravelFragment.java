@@ -197,6 +197,7 @@ public class TravelFragment extends Fragment implements GoogleApiClient.OnConnec
                 mLayout.requestFocus();
                 fetchDistance();
             }
+            places.release();
         }
     };
 

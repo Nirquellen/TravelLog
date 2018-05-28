@@ -144,7 +144,7 @@ public class FuelFragment extends Fragment implements FuelAdapter.OnPopUpMenuCli
             mRealm = Realm.getDefaultInstance();
             mRealm.executeTransaction(new Realm.Transaction() {
                 @Override
-                public void execute(Realm realm) {
+                public void execute(@NonNull Realm realm) {
                     realm.insertOrUpdate(fuel);
                 }
             });

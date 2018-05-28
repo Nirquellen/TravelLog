@@ -11,6 +11,7 @@ import android.os.Build;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
+import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -109,9 +110,9 @@ public class MainActivity extends AppCompatActivity{
                             try {
                                 writePermissionCheck();
                             } catch (DocumentException e) {
-                                e.printStackTrace();
+                                Toast.makeText(getBaseContext(), "Document exception", Toast.LENGTH_SHORT).show();
                             } catch (FileNotFoundException e) {
-                                e.printStackTrace();
+                                Toast.makeText(getBaseContext(), "File Not Found exception", Toast.LENGTH_SHORT).show();
                             }
                             break;
 
@@ -154,6 +155,18 @@ public class MainActivity extends AppCompatActivity{
         }
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_WRITE_PERMISSION && grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            try {
+                makePdf();
+            } catch (DocumentException | FileNotFoundException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
     private void showWritePermissionRationale(final Context context) {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
         alertBuilder.setCancelable(true);
@@ -173,8 +186,8 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private Boolean checkPreferences() {
-        if(mSharedPreferences.getString("consumption", null).isEmpty() || mSharedPreferences.getString("transfer", null).isEmpty() ||
-                mSharedPreferences.getString("licence_plate", null).isEmpty()) {
+        if(mSharedPreferences.getString("consumption", "").isEmpty() || mSharedPreferences.getString("transfer", "").isEmpty() ||
+                mSharedPreferences.getString("licence_plate", "").isEmpty()) {
             Toast.makeText(this, R.string.preference_missing, Toast.LENGTH_SHORT).show();
             return false;
         } else {
@@ -183,7 +196,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private int counting() {
-        float consumption = Float.valueOf(mSharedPreferences.getString("consumption", null));
+        float consumption = Float.valueOf(mSharedPreferences.getString("consumption", ""));
         android.util.Log.d("Main Activity", String.valueOf(consumption));
         float km = 0;
         float fuel = 0;
@@ -201,7 +214,7 @@ public class MainActivity extends AppCompatActivity{
 
     private void makePdf() throws DocumentException, FileNotFoundException {
         Transfer mTransfer = new Transfer();
-        mTransfer.value = Float.valueOf(mSharedPreferences.getString("transfer", null));
+        mTransfer.value = Float.valueOf(mSharedPreferences.getString("transfer", ""));
 
         Document document = new Document(PageSize.A4.rotate());
         File rootDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
@@ -227,7 +240,7 @@ public class MainActivity extends AppCompatActivity{
         table.addCell("");
         table.addCell("");
         table.getDefaultCell().setBackgroundColor(new BaseColor(255, 179, 0));
-        table.addCell(mSharedPreferences.getString("licence_plate", null));
+        table.addCell(mSharedPreferences.getString("licence_plate", ""));
 
         table.getDefaultCell().setBackgroundColor(BaseColor.WHITE);
         table.addCell("");
