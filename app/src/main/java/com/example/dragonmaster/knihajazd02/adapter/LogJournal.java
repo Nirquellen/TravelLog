@@ -24,6 +24,8 @@ import io.realm.RealmRecyclerViewAdapter;
 
 /**
  * Created by Dragon Master on 23.3.2018.
+ *
+ * LogJournalAdapter, at je jasne, ze je to Adapter
  */
 
 public class LogJournal extends RealmRecyclerViewAdapter<Log, LogJournal.ViewHolder> {

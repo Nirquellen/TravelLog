@@ -8,6 +8,7 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <!-- Zadna zmena oproti AppTheme -->
     <style name="BestJulkaTheme" parent="AppTheme" >
         <item name="colorPrimary">@color/colorPrimary</item>
     </style>

@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
+import android.os.Bundle;
 import android.os.Environment;
 import android.preference.PreferenceManager;
 import android.provider.Settings;
@@ -18,7 +19,6 @@ import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
@@ -51,13 +51,14 @@ import com.itextpdf.text.pdf.PdfPCellEvent;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 
-
 import io.realm.Realm;
 import io.realm.RealmResults;
 
 public class MainActivity extends AppCompatActivity{
 
     private static final int REQUEST_WRITE_PERMISSION = 42;
+
+//  Konzistentni nazvoslovi promennych, lip se to cte (bud mFoo, nebo foo, ale vsude stejne)
     private SharedPreferences mSharedPreferences;
     private RealmResults<Log> logs;
 
@@ -194,6 +195,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private Boolean checkPreferences() {
+//        Konstanta pro klice k ziskani sharedPrefs, nejlip to cele dat do nejake helper tridy a volat jenom gettery a settery, Activity at se nestara o sharedPrefs primo
         if(mSharedPreferences.getString("consumption", "").isEmpty() || mSharedPreferences.getString("transfer", "0").isEmpty() ||
                 mSharedPreferences.getString("licence_plate", "").isEmpty()) {
             Toast.makeText(this, R.string.preference_missing, Toast.LENGTH_SHORT).show();
@@ -205,6 +207,7 @@ public class MainActivity extends AppCompatActivity{
 
     private int counting() {
         float consumption = Float.valueOf(mSharedPreferences.getString("consumption", ""));
+//        Blbe, kdyz si vlastni tridu Log pojmenujes stejne jako hlavni logovaci tridu pro Android, ze? :D
         android.util.Log.d("Main Activity", String.valueOf(consumption));
         float km = 0;
         float fuel = 0;
@@ -220,6 +223,7 @@ public class MainActivity extends AppCompatActivity{
         return (int)(fuel/consumption*100 - km);
     }
 
+//    Bylo by pekne, kdyby se Activity nemusela starat o veci jako generovani PDF, tohle neni jeji hlavni kompetence, mela by si jenom zavolat nekoho, kdo se o to uz postara
     private void makePdf() throws DocumentException, FileNotFoundException {
         Transfer mTransfer = new Transfer();
         mTransfer.value = Float.valueOf(mSharedPreferences.getString("transfer", ""));
@@ -263,8 +267,7 @@ public class MainActivity extends AppCompatActivity{
         table.addCell("");
         table.addCell("");
         table.addCell("");
-        cell = new PdfPCell(new Phrase("Najazdené km celkom", font));
-        table.addCell(cell);
+        table.addCell("Najazdené km celkom");   // strings.xml
         cell = new PdfPCell();
         cell.setCellEvent(new TransferEvent(mTransfer, font));
         cell.setBackgroundColor(new BaseColor(255, 179, 0));

@@ -67,6 +67,7 @@ public class FuelAdapter extends RealmRecyclerViewAdapter<Fuel, FuelAdapter.View
             itemView.setOnLongClickListener(this);
         }
 
+        // Kdyz uz tady mas nabindovany ten Butterknife, klidne jsi ho mohla pouzit i pro onClick eventy (@OnClick)
         @Override
         public void onClick(final View view) {
             android.util.Log.d(TAG, "onClick: happens");

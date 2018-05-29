@@ -15,6 +15,7 @@
         android:theme="@style/BestJulkaTheme">
         <activity android:name=".activity.MainActivity"
             android:theme="@style/BestJulkaTheme">
+            <!-- Neni treba specifikovat Activity theme, pokud je stejne jako Application theme -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

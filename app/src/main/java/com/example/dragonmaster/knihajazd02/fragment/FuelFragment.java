@@ -123,6 +123,7 @@ public class FuelFragment extends Fragment implements FuelAdapter.OnPopUpMenuCli
         mRealm.close();
     }
 
+//    Jediny usage. Jestli by nebylo hezci, kdyby Fragment implementoval OnDateSetListener a predavala bys this misto tehle promenne
     DatePickerDialog.OnDateSetListener dateListener = new DatePickerDialog.OnDateSetListener() {
         @Override
         public void onDateSet(DatePicker view, int year, int monthOfYear,

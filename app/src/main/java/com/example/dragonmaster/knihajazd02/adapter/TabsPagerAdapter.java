@@ -13,6 +13,8 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
         super(fm);
     }
 
+//    Fuj, nekonzistence v poloze zavorek
+//    Fragment do importu
     @Override
     public android.support.v4.app.Fragment getItem(int index)
     {
@@ -37,6 +39,7 @@ public class TabsPagerAdapter extends FragmentPagerAdapter {
     public CharSequence getPageTitle(int position) {
         switch(position){
             case 0:
+//                strings.xml, mame radi preklady
                 return "TRAVELS";
             case 1:
                 return "GAS";
