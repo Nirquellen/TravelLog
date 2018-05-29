@@ -9,14 +9,16 @@
             android:summary="@string/plate_sum"
             android:inputType="textCapCharacters"
             android:order="0"
-            android:hint="@string/licence_plate"/>
+            android:hint="@string/licence_plate"
+            android:imeOptions="actionDone"/>
 
         <EditTextPreference
             android:title="@string/car_consumption"
             android:key="consumption"
             android:summary="@string/consumption_sum"
             android:inputType="numberDecimal"
-            android:order="1"/>
+            android:order="1"
+            android:imeOptions="actionDone"/>
 
     </PreferenceCategory>
 
@@ -29,7 +31,8 @@
             android:summary="@string/transfer_sum"
             android:inputType="number"
             android:order="2"
-            android:hint="@string/transfer"/>
+            android:hint="@string/transfer"
+            android:imeOptions="actionDone"/>
 
     </PreferenceCategory>
 

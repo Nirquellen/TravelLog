@@ -31,6 +31,7 @@ import com.example.dragonmaster.knihajazd02.model.Log;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Locale;
 
@@ -38,15 +39,18 @@ import com.itextpdf.text.BaseColor;
 import com.itextpdf.text.Document;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.ColumnText;
 import com.itextpdf.text.pdf.PdfContentByte;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPCellEvent;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+
 
 import io.realm.Realm;
 import io.realm.RealmResults;
@@ -92,39 +96,43 @@ public class MainActivity extends AppCompatActivity{
 
     private void export() {
         int km = counting();
-        if(km != 0) {
-            AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
-            builder1.setMessage(getResources().getString(R.string.km_left, km))
-                    .setCancelable(true).setNeutralButton(R.string.okay,
-                    new DialogInterface.OnClickListener() {
-                        public void onClick(DialogInterface dialog, int id) {
-                            dialog.cancel();
-                        }
-                    }).show();
-        } else {
-            DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    switch (which){
-                        case DialogInterface.BUTTON_POSITIVE:
-                            try {
-                                writePermissionCheck();
-                            } catch (DocumentException e) {
-                                Toast.makeText(getBaseContext(), "Document exception", Toast.LENGTH_SHORT).show();
-                            } catch (FileNotFoundException e) {
-                                Toast.makeText(getBaseContext(), "File Not Found exception", Toast.LENGTH_SHORT).show();
+        if(logs.isEmpty())
+            Toast.makeText(this, R.string.empty_database, Toast.LENGTH_SHORT).show();
+        else {
+            if (km != 0) {
+                AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
+                builder1.setMessage(getResources().getString(R.string.km_left, km))
+                        .setCancelable(true).setNeutralButton(R.string.okay,
+                        new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int id) {
+                                dialog.cancel();
                             }
-                            break;
+                        }).show();
+            } else {
+                DialogInterface.OnClickListener dialogClickListener = new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        switch (which) {
+                            case DialogInterface.BUTTON_POSITIVE:
+                                try {
+                                    writePermissionCheck();
+                                } catch (DocumentException e) {
+                                    Toast.makeText(getBaseContext(), "Document exception", Toast.LENGTH_SHORT).show();
+                                } catch (FileNotFoundException e) {
+                                    Toast.makeText(getBaseContext(), "File Not Found exception", Toast.LENGTH_SHORT).show();
+                                }
+                                break;
 
-                        case DialogInterface.BUTTON_NEGATIVE:
-                            dialog.cancel();
-                            break;
+                            case DialogInterface.BUTTON_NEGATIVE:
+                                dialog.cancel();
+                                break;
+                        }
                     }
-                }
-            };
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setMessage(R.string.pdf_export_question).setPositiveButton(R.string.yes, dialogClickListener)
-                    .setNegativeButton(R.string.no, dialogClickListener).show();
+                };
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setMessage(R.string.pdf_export_question).setPositiveButton(R.string.yes, dialogClickListener)
+                        .setNegativeButton(R.string.no, dialogClickListener).show();
+            }
         }
     }
 
@@ -186,7 +194,7 @@ public class MainActivity extends AppCompatActivity{
     }
 
     private Boolean checkPreferences() {
-        if(mSharedPreferences.getString("consumption", "").isEmpty() || mSharedPreferences.getString("transfer", "").isEmpty() ||
+        if(mSharedPreferences.getString("consumption", "").isEmpty() || mSharedPreferences.getString("transfer", "0").isEmpty() ||
                 mSharedPreferences.getString("licence_plate", "").isEmpty()) {
             Toast.makeText(this, R.string.preference_missing, Toast.LENGTH_SHORT).show();
             return false;
@@ -226,9 +234,17 @@ public class MainActivity extends AppCompatActivity{
         float[] columnWidths = {1.5f, 1, 1, 2.5f, 2.5f, 1.5f, 1.5f, 1.2f};
         PdfPTable table = new PdfPTable(columnWidths);
         table.setWidthPercentage(100);
+        BaseFont courier = null;
+        try {
+            courier = BaseFont.createFont(BaseFont.COURIER, BaseFont.CP1250, BaseFont.EMBEDDED);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Font font = new Font(courier);
+        android.util.Log.d("FONT", "makePdf: "+font.getBaseFont().getEncoding());
 
         table.getDefaultCell().setBorder(Rectangle.NO_BORDER);
-        PdfPCell cell = new PdfPCell(new Phrase("Kniha jázd"));
+        PdfPCell cell = new PdfPCell(new Phrase("Kniha jázd", font));
         cell.setColspan(3);
         cell.setFixedHeight(34);
         cell.setBorder(Rectangle.NO_BORDER);
@@ -240,52 +256,80 @@ public class MainActivity extends AppCompatActivity{
         table.addCell("");
         table.addCell("");
         table.getDefaultCell().setBackgroundColor(new BaseColor(255, 179, 0));
-        table.addCell(mSharedPreferences.getString("licence_plate", ""));
+        cell = new PdfPCell(new Phrase(mSharedPreferences.getString("licence_plate", ""), font));
+        table.addCell(cell);
 
         table.getDefaultCell().setBackgroundColor(BaseColor.WHITE);
         table.addCell("");
         table.addCell("");
         table.addCell("");
-        table.addCell("Najazdené km celkom");
+        cell = new PdfPCell(new Phrase("Najazdené km celkom", font));
+        table.addCell(cell);
         cell = new PdfPCell();
-        cell.setCellEvent(new TransferEvent(mTransfer));
+        cell.setCellEvent(new TransferEvent(mTransfer, font));
         cell.setBackgroundColor(new BaseColor(255, 179, 0));
         table.addCell(cell);
         table.addCell("");
         table.addCell("");
         table.addCell("");
 
-        table.getDefaultCell().setBackgroundColor(new BaseColor(255, 229, 76));
-        table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_CENTER);
-        table.getDefaultCell().setBorder(Rectangle.BOX);
-        table.addCell("Dátum");
-        table.addCell("Čas");
-        table.addCell("Účel");
-        table.addCell("Od");
-        table.addCell("Do");
-        table.addCell("Stav v štarte");
-        table.addCell("Stav v cieli");
-        table.addCell("Najazdené km");
+        cell = new PdfPCell(new Phrase("Dátum", font));
+        cell.setBackgroundColor(new BaseColor(255, 229, 76));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+        cell = new PdfPCell(new Phrase("Čas", font));
+        cell.setBackgroundColor(new BaseColor(255, 229, 76));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+        cell = new PdfPCell(new Phrase("Účel", font));
+        cell.setBackgroundColor(new BaseColor(255, 229, 76));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+        cell = new PdfPCell(new Phrase("Od", font));
+        cell.setBackgroundColor(new BaseColor(255, 229, 76));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+        cell = new PdfPCell(new Phrase("Do", font));
+        cell.setBackgroundColor(new BaseColor(255, 229, 76));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+        cell = new PdfPCell(new Phrase("Stav v štarte", font));
+        cell.setBackgroundColor(new BaseColor(255, 229, 76));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+        cell = new PdfPCell(new Phrase("Stav v cieli", font));
+        cell.setBackgroundColor(new BaseColor(255, 229, 76));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
+        cell = new PdfPCell(new Phrase("Najazdené km", font));
+        cell.setBackgroundColor(new BaseColor(255, 229, 76));
+        cell.setHorizontalAlignment(Element.ALIGN_CENTER);
+        table.addCell(cell);
         table.setHeaderRows(3);
 
         table.getDefaultCell().setBackgroundColor(BaseColor.WHITE);
         table.getDefaultCell().setHorizontalAlignment(Element.ALIGN_LEFT);
         cell.setFixedHeight(15);
-        SimpleDateFormat formatDate = new SimpleDateFormat("d. MMM. yyyy", Locale.getDefault());
+        SimpleDateFormat formatDate = new SimpleDateFormat("d. MMM yyyy", Locale.getDefault());
         SimpleDateFormat formatTime = new SimpleDateFormat("HH:mm", Locale.getDefault());
         for(Log log : logs) {
-            table.addCell(formatDate.format(log.date));
-            table.addCell(formatTime.format(log.date));
-            table.addCell("Servis");
-            table.addCell(log.start);
-            table.addCell(log.end);
-            cell = new PdfPCell();
-            cell.setCellEvent(new TransferEvent(mTransfer));
+            cell = new PdfPCell(new Phrase(formatDate.format(log.date), font));
+            table.addCell(cell);
+            cell = new PdfPCell(new Phrase(formatTime.format(log.date), font));
+            table.addCell(cell);
+            cell = new PdfPCell(new Phrase("Servis", font));
+            table.addCell(cell);
+            cell = new PdfPCell(new Phrase(log.start, font));
+            table.addCell(cell);
+            cell = new PdfPCell(new Phrase(log.end, font));
             table.addCell(cell);
             cell = new PdfPCell();
-            cell.setCellEvent(new TransferEvent(mTransfer, Float.valueOf(log.distance)));
+            cell.setCellEvent(new TransferEvent(mTransfer, font));
             table.addCell(cell);
-            cell = new PdfPCell(new Phrase(log.distance));
+            cell = new PdfPCell();
+            cell.setCellEvent(new TransferEvent(mTransfer, Float.valueOf(log.distance), font));
+            table.addCell(cell);
+            cell = new PdfPCell(new Phrase(log.distance, font));
             cell.setHorizontalAlignment(Rectangle.ALIGN_RIGHT);
             table.addCell(cell);
         }
@@ -305,21 +349,24 @@ public class MainActivity extends AppCompatActivity{
     public class TransferEvent implements PdfPCellEvent {
         float distance;
         Transfer transfer;
+        Font f;
 
-        private TransferEvent(Transfer trans) {
+        private TransferEvent(Transfer trans, Font font) {
             transfer = trans;
             distance = 0;
+            f = font;
         }
 
-        private TransferEvent(Transfer trans, float distance) {
+        private TransferEvent(Transfer trans, float distance, Font font) {
             transfer = trans;
             this.distance = distance;
+            f = font;
         }
 
         public void cellLayout(PdfPCell cell, Rectangle position, PdfContentByte[] canvases) {
             transfer.value += distance;
             PdfContentByte canvas = canvases[PdfPTable.TEXTCANVAS];
-            ColumnText.showTextAligned(canvas, Element.ALIGN_CENTER, new Phrase(String.valueOf(transfer.value)), position.getLeft() + position.getWidth()/2, position.getBottom() + 2, 0);
+            ColumnText.showTextAligned(canvas, Element.ALIGN_CENTER, new Phrase(String.valueOf(transfer.value), f), position.getLeft() + position.getWidth()/2, position.getBottom() + 2, 0);
         }
     }
 }

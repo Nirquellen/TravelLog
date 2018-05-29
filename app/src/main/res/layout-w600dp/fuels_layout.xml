@@ -45,7 +45,8 @@
                 android:focusable="true"
                 android:inputType="number"
                 android:layout_height="wrap_content"
-                android:layout_width="match_parent"/>
+                android:layout_width="match_parent"
+                android:imeOptions="actionDone"/>
         </android.support.design.widget.TextInputLayout>
 
 

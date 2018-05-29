@@ -34,4 +34,5 @@
     <string name="plate_sum">Zadajte ŠPZ auta</string>
     <string name="export_settings">Nastavenia Exportu</string>
     <string name="car_settings">Nastavenia Auta</string>
+    <string name="empty_database">Nie je čo exportovať</string>
 </resources>
