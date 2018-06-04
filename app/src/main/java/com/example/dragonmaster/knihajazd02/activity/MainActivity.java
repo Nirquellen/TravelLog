@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity{
             if (km != 0) {
                 AlertDialog.Builder builder1 = new AlertDialog.Builder(this);
                 builder1.setMessage(getResources().getString(R.string.km_left, km))
-                        .setCancelable(true).setNeutralButton(R.string.okay,
+                        .setCancelable(true).setPositiveButton(R.string.okay,
                         new DialogInterface.OnClickListener() {
                             public void onClick(DialogInterface dialog, int id) {
                                 dialog.cancel();
